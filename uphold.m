@@ -25,10 +25,18 @@ for i = 1 : NumFiles
      count = count + 1;
    end
 end
+   %Convert Image to movie Frame
+   frame = im2frame(ResizeImg);
+ 
 %Open the File 'React.mp4'
 open(VideoObj);
+
+%Write a frame
+ writeVideo(VideoObj, frame);
+ 
 %Write the Images into the File 'React.mp4'
 writeVideo(VideoObj,Uphold_Images );
 %Close the file 'React.mp4'
 close(VideoObj);
+implay(Uphold_Images)
 
