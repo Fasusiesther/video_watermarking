@@ -1,0 +1,456 @@
+﻿COMPILED LIST OF SOURCE CODE AND OUTPUT RESULT USED FOR VIDEO WATERMARKING IN MY PROJECT
+Playing  and Reading of video Normally on Matlab
+%% Read a video into MATLAB
+videoFileReader = VideoReader('video 1.mp4');
+depVideoPlayer = vision.DeployableVideoPlayer; 
+%Read frame by frame
+while hasFrame(videoFileReader)
+    videoFrame = readFrame(videoFileReader);
+   %Display video
+   depVideoPlayer(videoFrame);
+    pause(1/videoFileReader.FrameRate);
+end
+Output File: 
+
+
+The code for changing videos to sequence of Images in Matlab.
+%%To read the video in matlab, we need to give it a name.
+a= VideoReader('video 3.mp4');
+get (a)
+%% To start the reading of the video frame one by one and labelling it accordingly
+a= VideoReader('video 3.mp4');
+for img = 1:a.NumberOfFrames;
+ filename = strcat('frame',num2str(img),'.jpg');
+  b =read(a,img);
+  imwrite(b,filename);
+end
+Output Result: It print out all the whole code in the video, and list time from frame 1  end ,,  but due to space shortage ,I could not print all because it was long.
+
+
+                                          The Flowchart diagram using Matlab for video watermarking
+
+                                                             
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                                                                                                                        
+Changing of Images in Video in single and sub heading plot in Matlab
+%%Reading each frame one by one to the last one
+VidObj = VideoReader('video 3.mp4');
+%Num_Frames = Vptr.NumberOfFrames;
+NFrames = round(VidObj.FrameRate*VidObj.Duration);
+%Find the height and weight of the frame
+Nrows = VidObj.height;
+Ncols = VidObj.width;
+%Preallocate the matrix
+Img_s = zeros([Nrows,Ncols,NFrames]);
+for i = 1:NFrames
+%Read each frame	
+Img = readFrame(VidObj);
+%To display all the frames
+figure,imshow(Img);
+end
+%Save the matrix as .mat file
+Save Video_Images.mat Img_s;
+Note: The images are extracted into frame numbers from the video and they are sorted numerically.
+Output Result:  
+
+The changing of sequences of images in a folder into video in matlab
+%Make the Below path as the Current Folder
+cd('C:\Program Files\Matlab\bin\My  Images watermark\videos folder.jpg');
+%Obtain all the JPEG format files in the current folder
+Files = dir('*.jpg');
+%Find the total number of JPEG files in the Current Folder
+NumFiles= size(Files,1);
+%Preallocate a 4-D matrix to store the Image Sequence
+%Matrix Format : [Height Width 3 Number_Of_Images]
+Uphold_Images = uint8(zeros([294 419 3 NumFiles*2]));
+%To write Video File
+VideoObj = VideoWriter('React.mp4');
+%Number of Frames per Second
+VideoObj.FrameRate = 2; 
+%Define the Video Quality [ 0 to 100 ]
+VideoObj.Quality   = 60;  
+count=1;
+for i = 1 : NumFiles
+   %Read the Images in the Current Folder one by one using For Loop
+   I = imread(Files(i).name);
+   %The Size of the Images are made same
+   ResizeImg = imresize(I,[294 419]);
+   %Each Image is copied 2 times so that in a second 1 image can be viewed
+   for j = 1 : 2
+     Uphold_Images(:,:,:,count)=ResizeImg;
+     count = count + 1;
+   end
+end
+%Open the File 'React.mp4'
+open(VideoObj);
+%Write the Images into the File 'React.mp4'
+writeVideo(VideoObj,Uphold_Images );
+%Close the file 'React.mp4'
+close(VideoObj);
+Output Result:  
+
+
+How to watermark a video using logo images (Visible watermarking)
+% Read in the video file
+vidObj = VideoReader('video 2.mp4');
+ 
+% Read in the watermark image
+watermark = imread('table 2.jpg');
+watermark_alpha = 0.5;  % alpha value for watermark transparency (adjust as needed)
+ 
+% Define the location of the watermark in the video frame
+watermark_pos = [50, 50];
+ 
+% Create a new video writer object
+outObj = VideoWriter('marked.mp4', 'MPEG-4');
+open(outObj);
+ 
+% Loop over each frame in the video and add the watermark
+while hasFrame(vidObj)
+    frame = readFrame(vidObj);
+    
+    % Add the watermark to the frame
+    watermarked_frame = frame;
+    watermarked_frame(watermark_pos(1):watermark_pos(1)+size(watermark, 1)-1, ...
+        watermark_pos(2):watermark_pos(2)+size(watermark, 2)-1, :) = ...
+        (1-watermark_alpha)*watermarked_frame(watermark_pos(1):watermark_pos(1)+size(watermark, 1)-1, ...
+        watermark_pos(2):watermark_pos(2)+size(watermark, 2)-1, :) + ...
+        watermark_alpha*watermark;
+    
+    % Write the watermarked frame to the new video
+    writeVideo(outObj, watermarked_frame);
+end
+once you paste the code in your editor,just wait a little, to find the output object, Then implay it,if it thows error relax and redo it or give it another name,it will give the watermarked video with logo.
+ implay('marked.mp4')
+Output Result:  
+
+
+File Insertion for Video watermarking
+% Load the original MP4 video file
+video = VideoReader('video 2.mp4');
+% Determine the number of frames and frame dimensions
+numFrames = video.NumberOfFrames;
+frameHeight = video.Height;
+frameWidth = video.Width;
+ 
+% Create a new MP4 video file with the inserted file
+outputFilename = 'Rested_day.mp4';
+writerObj = VideoWriter(outputFilename, 'MPEG-4');
+open(writerObj);
+ 
+% Loop through each frame of the original video and write it to the new video
+for k = 1:numFrames
+    % Read the current frame
+    frame = read(video, k);
+    
+    % Insert the file into the frame (for example, a JPG image file)
+    if mod(k, 80) == 0 % insert the file every 80 frames
+        file = imread('table2.jpg');
+        file = imresize(file, [frameHeight/4, frameWidth/4]); % resize the file to fit a quarter of the frame
+        [fileHeight, fileWidth, ~] = size(file);
+        rowStart = randi(frameHeight - fileHeight);
+        colStart = randi(frameWidth - fileWidth);
+        frame(rowStart:rowStart+fileHeight-1, colStart:colStart+fileWidth-1, :) = file;
+    end
+    
+    % Write the modified frame to the new video
+    writeVideo(writerObj, frame);
+end
+ 
+% Close the new video file
+close(writerObj);
+Output Result:  
+
+
+The code for audio sound removal using Patchwork Techniques.
+% Read the input video file
+videoObj = VideoReader('video 1.mp4');
+% Define the patch size and overlap between patches
+patchSize = [100, 100];
+overlapSize = [25, 25];
+% Determine the number of rows and columns of patches
+nRows = floor((videoObj.Height - overlapSize(1)) / (patchSize(1) - overlapSize(1)));
+nCols = floor((videoObj.Width - overlapSize(2)) / (patchSize(2) - overlapSize(2)));
+% Initialize the output video file
+outputVideo = VideoWriter('court.avi');
+open(outputVideo);
+
+% Iterate through all frames of the video
+while hasFrame(videoObj)
+    % Read the current frame
+    currentFrame = readFrame(videoObj);
+    
+    % Initialize the output frame
+    outputFrame = zeros(videoObj.Height, videoObj.Width, 3, 'uint8');
+    
+    % Iterate through all patches in the current frame
+    for iRow = 1:nRows
+        for iCol = 1:nCols
+            % Compute the coordinates of the current patch
+            patchTop = (iRow - 1) * (patchSize(1) - overlapSize(1)) + 1;
+            patchBottom = patchTop + patchSize(1) - 1;
+            patchLeft = (iCol - 1) * (patchSize(2) - overlapSize(2)) + 1;
+            patchRight = patchLeft + patchSize(2) - 1;
+            
+            % Extract the current patch from the input frame
+            patch = currentFrame(patchTop:patchBottom, patchLeft:patchRight, :);
+            
+            % Insert the current patch into the output frame
+            outputFrame(patchTop:patchBottom, patchLeft:patchRight, :) = patch;
+        end
+    end
+    % Write the output frame to the output video file
+    writeVideo(outputVideo, outputFrame);
+end
+implay(outputVideo)
+% Close the output video file and release the input video object
+close(outputVideo);
+delete(videoObj);
+Output Result:  
+
+% Read the input video file
+% Read the input video file
+videoObj = VideoReader('video 1.mp4');
+
+% Define the number of temporal layers
+numLayers = 3;
+% Define the stack decomposition filters
+filters = cell(numLayers, 1);
+for i = 1:numLayers
+    filters{i} = fspecial('gaussian', [i*2+1 i*2+1], i);
+end
+% Initialize the output video file
+outputVideo = VideoWriter('mine.avi');
+open(outputVideo);
+% Iterate through all frames of the video
+while hasFrame(videoObj)
+    % Read the current frame
+    currentFrame = readFrame(videoObj); 
+    % Initialize the temporal layers
+    layers = cell(numLayers, 1);
+    for i = 1:numLayers
+        layers{i} = zeros(size(currentFrame));
+    end
+    % Apply the stack decomposition filters to the current frame
+    for i = 1:numLayers
+        filtered = imfilter(currentFrame, filters{i}, 'replicate', 'same', 'conv');
+        layers{i} = currentFrame - filtered;
+    end
+    % Write the temporal layers to the output video file
+    for i = 1:numLayers
+        writeVideo(outputVideo, layers{i});
+    end
+end
+disp(outputVideo)
+% Close the output video file and release the input video object
+close(outputVideo);
+delete(videoObj);
+Output Result:
+
+Attacks in videos of mp4 using Gaussian, Denoising, Geometric and compression in Matlab
+ 
+
+%%% Adding Gaussian noise to a mp4 video in matlab
+
+%% Load the input MP4 video
+v = VideoReader('video 1.mp4');
+ 
+% Create a VideoWriter object for the output video
+vw = VideoWriter('output.mp4', 'MPEG-4');
+vw.FrameRate = v.FrameRate;
+ 	
+% Open the VideoWriter object
+open(vw);
+ 
+% Loop through each frame of the video and apply a Gaussian noise distortion
+while hasFrame(v)
+    % Read the current frame
+    frame = readFrame(v);
+    
+    % Apply Gaussian noise distortion to the frame
+    % For example, add noise with mean 0 and standard deviation 10
+    noisyFrame = imnoise(frame, 'gaussian', 0, 10^0.001);
+    
+    % Write the modified frame to the output video
+    writeVideo(vw, noisyFrame);
+end
+ 
+% Close the VideoWriter object
+close(vw);
+ 
+imshow(noisyFrame)
+ 
+Output Result:
+
+
+Left: The mp4 video of noisy images                        Right: Last Frame of the Video in image format
+
+ 
+2.    %% Matlab Code showing denoise frame attack in mp4 video file
+
+% Load the input MP4 video
+v = VideoReader('video 1.mp4');
+ 
+% Create a VideoWriter object for the output video
+vw = VideoWriter('output.mp4', 'MPEG-4');
+vw.FrameRate = v.FrameRate;
+ 
+% Open the VideoWriter object
+open(vw);	
+ 	
+% Loop through each frame of the video and apply a Gaussian denoising attack
+while hasFrame(v)
+    % Read the current frame
+    frame = readFrame(v);
+    
+    % Apply Gaussian denoising to the frame
+    % For example, remove noise with standard deviation 10
+    denoisedFrame = imgaussfilt(frame, 10);
+    
+    % Write the modified frame to the output video
+    writeVideo(vw, denoisedFrame);
+end
+ 
+% Close the VideoWriter object
+close(vw);
+imshow(denoisedFrame)
+ 
+
+Output Result:
+
+
+
+
+Left: Last Frame of the Video in image format        Right: The mp4 video of denoise in images
+
+%%%Quantization attack in mp4 video using matlab 
+
+% Load the input MP4 video
+v = VideoReader('video 1.mp4');
+ 
+% Create a VideoWriter object for the output video
+vw = VideoWriter('output.mp4', 'MPEG-4');
+vw.FrameRate = v.FrameRate;
+ 
+% Open the VideoWriter object
+open(vw);
+ 
+% Loop through each frame of the video and apply a color quantization attack
+while hasFrame(v)
+    % Read the current frame
+    frame = readFrame(v);
+    
+    % Apply color quantization to the frame
+    % For example, reduce the color depth to 4 bits
+    quantizedFrame = imquantize(frame, linspace(0, 1, 2^4));
+    
+    % Convert the quantized frame to uint8 format for saving to MP4
+    quantizedFrame = uint8(quantizedFrame * (256 / 2^4 - 1));
+    
+    % Write the modified frame to the output video
+    writeVideo(vw, quantizedFrame);
+end
+ 
+% Close the VideoWriter object
+close(vw);
+imshow(quantizedFrame)
+ 
+
+Output Result:
+
+
+
+Left: Last Frame of the Video in image format    Right: The mp4 video of Quantized frame in images 
+
+
+%% Compressed Frame in mp4 video in matlab
+
+% Load the input MP4 video
+v = VideoReader('video 1.mp4');
+ 
+% Create a VideoWriter object for the output video
+vw = VideoWriter('output.mp4', 'MPEG-4');
+vw.FrameRate = v.FrameRate;
+ 
+% Open the VideoWriter object
+open(vw);
+ 
+% Set the target resolution for the output video
+targetWidth = 640;
+targetHeight = 360;
+ 
+% Loop through each frame of the video and apply a compression attack
+while hasFrame(v)
+    % Read the current frame
+    frame = readFrame(v);
+    
+    % Resize the frame to the target resolution
+    resizedFrame = imresize(frame, [targetHeight, targetWidth]);
+    
+    % Apply lossy compression to the resized frame
+    % For example, compress the frame with a quality factor of 50
+    compressedFrame = imresize(imresize(resizedFrame, 0.5), 2, 'nearest');
+    
+    % Write the modified frame to the output video
+    writeVideo(vw, compressedFrame);
+end
+ 
+% Close the VideoWriter object
+close(vw);
+imshow(compressedFrame)
+ 
+ Output Result:
+
+
+
+Left: Last Frame of the Video in image format    Right: The mp4 video of Compressed frame in images 
+
+%%%Geometric attack Frame in mp4 video in matlab
+
+% Load the input MP4 video
+v = VideoReader('video 1.mp4');
+ 
+% Create a VideoWriter object for the output video
+vw = VideoWriter('output.mp4', 'MPEG-4');
+vw.FrameRate = v.FrameRate;
+ 
+% Open the VideoWriter object
+open(vw);
+ 
+% Loop through each frame of the video and apply a geometric attack
+while hasFrame(v)
+    % Read the current frame
+    frame = readFrame(v);
+    
+    % Apply a geometric attack to the frame
+    % For example, scale the frame by a factor of 1.5
+    scaledFrame = imresize(frame, 1.5);
+    
+    % Write the modified frame to the output video
+    writeVideo(vw, scaledFrame);
+end
+ 
+% Close the VideoWriter object
+close(vw);
+imshow(scaledFrame)
+
+Output Result:
+
+Left: Last Frame of the Video in image format        Right: The mp4 video of Scaled frame in images 
+
+
+
