@@ -1,4 +1,10 @@
 ## Video_watermarking Readme File
+The video watermarking is the embedding or extracting of image (videowatermarker) in a video using matlab as a tool, The use of common attack techniques like geometric,file insertion (removing some frame and putting another frame entirely) etc are needed, The use of metric value like PSNR, salt and pepper, Gaussian  attack are also needed. 
+
+1. The main project is to watermark a video file,removing the audio folder and watermark each frame and then add the audio back to video to see the result with the original video, The use of spatial domain techniques like LSB, patchwork,Correlation is needed for this video during, Other frequency domain like DCT,DFTand SVD is also needed in the watermarking.
+
+2.  The project is set to combined a text file ,the audio and complied them in a clean video and watermark them all and also recover all the watermark used as well,then add differnt attack to it and see the result with th eoriginal video file.
+ 
 Here is the  breakdown analysis for the project.
 ### code 1
 This explain the main concept of how to play video using video viewer or deployable  player on Matlab
