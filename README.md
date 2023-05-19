@@ -22,4 +22,6 @@ This code consist of a File Insertion(common attack) for Video watermark, it is 
 The code display the remobval of audio sound in video using Patchwork Techniques.
 ### code 8
 The code is used for changing a normal video to a binary images using Stack decomposition filter
+### Logo 1,2 and 3
+They are the image picture for watermarking so we can call them the watermarker.
 ### ALL OTHER DOCUMENT AND VIDEOS WILL BE IN FOLDER IN GOOGLE DRIVE FOR EASY ACCESS WHILE LINKS WILL BE SHARED IN THE GITHUB FOLDER FILE FOR VIDEO.
